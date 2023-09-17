@@ -1,32 +1,38 @@
 #include <assert.h>
 #include <ctype.h>
-#include <stddef.h>
 
-#include "comparators.h"
+#include "../include/comparators.h"
+#include "../include/text.h"
 
 int my_strcmp(const void *a, const void *b)
 {
     assert(a != NULL);
     assert(b != NULL);
 
-    const char *str1 = *(const char * const *)a;
-    const char *str2 = *(const char * const *)b;
+    struct Line str1 = *(const Line *)a;
+    struct Line str2 = *(const Line *)b;
+
+    assert(str1.line != NULL);
+    assert(str2.line != NULL);
 
     while(true)
     {
-        while(*str1 != '\0' && !isalpha(*str1)) str1++;
-        while(*str2 != '\0' && !isalpha(*str2)) str2++;
+        while(str1.len > 0 && !isalpha(*str1.line)) {str1.line++; str1.len--;}
+        while(str2.len > 0 && !isalpha(*str2.line)) {str2.line++; str2.len--;}
 
-        if(*str1 != *str2 || *str1 == '\0' || *str2 == '\0')
+        if(tolower(*str1.line) != tolower(*str2.line) || str1.len == 0 || str2.len == 0)
         {
             break;
         }
 
-        str1++;
-        str2++;
+        str1.line++;
+        str1.len--;
+
+        str2.line++;
+        str2.len--;
     }
 
-    return *str1 - *str2;
+    return tolower(*str1.line) - tolower(*str2.line);
 }
 
 int my_strcmp_reverse(const void *a, const void *b)
@@ -34,28 +40,37 @@ int my_strcmp_reverse(const void *a, const void *b)
     assert(a != NULL);
     assert(b != NULL);
 
-    const char *str1 = *(const char * const *)a;
-    const char *str2 = *(const char * const *)b;
+    struct Line str1 = *(const Line *)a;
+    struct Line str2 = *(const Line *)b;
 
-    const char *str1_end = str1;
-    const char *str2_end = str2;
-
-    while(*str1_end != '\0') str1_end++;
-    while(*str2_end != '\0') str2_end++;
+    assert(str1.line != NULL);
+    assert(str2.line != NULL);
 
     while(true)
     {
-        while(str1_end > str1 && !isalpha(*str1_end)) str1_end--;
-        while(str2_end > str2 && !isalpha(*str2_end)) str2_end--;
+        while(str1.len > 0 && !isalpha(str1.line[str1.len])) str1.len--;
+        while(str2.len > 0 && !isalpha(str2.line[str2.len])) str2.len--;
 
-        if(*str1_end != *str2_end || str1_end == str1 || str2_end == str2)
+        if(tolower(str1.line[str1.len]) != tolower(str2.line[str2.len]) || str1.len == 0 || str2.len == 0)
         {
             break;
         }
 
-        str1_end--;
-        str2_end--;
+        str1.len--;
+        str2.len--;
     }
 
-    return *str1_end - *str2_end;
+    return tolower(str1.line[str1.len]) - tolower(str2.line[str2.len]);
+}
+
+int base_text_cmp(const void *a, const void *b)
+{
+    assert(a != NULL);
+    assert(b != NULL);
+
+    size_t l_num1 = ((const Line *)a)->l_num;
+    size_t l_num2 = ((const Line *)b)->l_num;
+
+    if(l_num1 == l_num2) return 0;
+    return l_num1 > l_num2 ? 1 : -1;
 }

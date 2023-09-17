@@ -7,14 +7,17 @@ all: obj $(P_NAME)
 obj:
 	@mkdir obj
 
-$(P_NAME): obj/main.o obj/text.o obj/qsort.o obj/comparators.o
+$(P_NAME): obj/main.o obj/text.o obj/qsort.o obj/comparators.o obj/qsort.o
 	@g++ $(CFLAGS) $^ -o $@
 
-obj/main.o: source/main.cpp include/text.h include/comparators.h
+obj/main.o: source/main.cpp include/text.h include/comparators.h include/qsort.h
 	@g++ $(CFLAGS) -c $< -o $@
 
 obj/text.o: source/text.cpp include/text.h
 	@g++ $(CFLAGS) -c $< -o $@
 
 obj/comparators.o: source/comparators.cpp include/comparators.h
+	@g++ $(CFLAGS) -c $< -o $@
+
+obj/qsort.o: source/qsort.cpp include/qsort.h
 	@g++ $(CFLAGS) -c $< -o $@

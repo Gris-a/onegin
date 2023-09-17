@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
-#include "text.h"
+#include "../include/text.h"
 
 int make_text(const char path[], struct Text *text)
 {
@@ -13,16 +13,16 @@ int make_text(const char path[], struct Text *text)
 
     int err_code = 0;
 
-    if(err_code = read_text_buf(path, text))
+    if((err_code = read_text_buf(path, text)))
     {
         return err_code;
     }
 
     text->n_lines = n_lines(text->text_buf);
-    text->text    = (char **)calloc(text->n_lines + 1, sizeof(char *));
+    text->text    = (struct Line *)calloc(text->n_lines + 1, sizeof(Line));
     if(text->text == NULL)
     {
-        printf("Function %s: Unable to allocate memory.\n", __func__);
+        perror(__func__);
 
         return ENOMEM;
     }
@@ -32,8 +32,51 @@ int make_text(const char path[], struct Text *text)
     return EXIT_SUCCESS;
 }
 
+int read_text_buf(const char path[], struct Text *text)
+{
+    assert(path != NULL);
+    assert(text != NULL);
+
+    int err_code = 0;
+
+    FILE *file = fopen(path, "rb");
+    if(file == NULL)
+    {
+        perror(path);
+
+        return ENOENT;
+    }
+    text->text_size = filesize(path);
+
+    text->text_buf  = (char *)calloc(text->text_size + 1, sizeof(char));
+    if(text->text_buf == NULL)
+    {
+        perror(__func__);
+
+        err_code = ENOMEM;
+    }
+
+    if (text->text_buf != NULL)
+    {
+        size_t n_ch_readed = fread(text->text_buf, sizeof(char), text->text_size, file);
+
+        if(n_ch_readed != text->text_size)
+        {
+            printf("Error while reading file \"%s\". %zu/%zu chars are read.\n", path, n_ch_readed, text->text_size);
+
+            err_code = EIO;
+        }
+    }
+
+    fclose(file);
+
+    return err_code;
+}
+
 size_t n_lines(const char *buf)
 {
+    assert(buf != NULL);
+
     size_t n_lines = 0;
 
     if(*buf == '\0')
@@ -65,85 +108,55 @@ void text_lines(struct Text *text)
 
     char *buf = text->text_buf;
 
-    size_t str_len = 0;
-    size_t index   = 0;
+    size_t line_len = 0;
+    size_t index    = 0;
 
-    text->text[index++] = buf;
+    text->text[index].line = buf;
 
     while(*buf != '\0')
     {
         if(*buf == '\n')
         {
-            if(str_len == 0)
+            if(line_len > 0)
             {
-                text->text[index - 1] += 1;
+                text->text[index].len    = line_len;
+                text->text[index].l_num  = index + 1;
+                text->text[++index].line = buf + 1;
+
+                line_len = 0;
             }
             else
             {
-                text->text[index++] = buf + 1;
-
-                str_len = 0;
+                text->text[index].line += 1;
             }
             *buf = '\0';
         }
         else
         {
-            str_len++;
+            line_len++;
         }
 
         buf++;
     }
 
-    text->text[text->n_lines] = NULL;
-}
-
-int read_text_buf(const char path[], struct Text *text)
-{
-    assert(path != NULL);
-    assert(text != NULL);
-
-    int err_code = 0;
-
-    FILE *file = fopen(path, "rb");
-    if(file == NULL)
+    if(index < text->n_lines)
     {
-        printf("No such file \"%s\" \n", path);
-
-        return ENOENT;
+        text->text[index].len   = line_len;
+        text->text[index].l_num = index + 1;
     }
-    text->text_size = filesize(path);
-
-    text->text_buf  = (char *)calloc(text->text_size + 1, sizeof(char));
-    if(text->text_buf == NULL)
-    {
-        printf("Function %s: Unable to allocate memory.\n", __func__);
-
-        err_code = ENOMEM;
-    }
-
-    if (text->text_buf != NULL)
-    {
-        size_t n_ch_readed = fread(text->text_buf, sizeof(char), text->text_size, file);
-
-        if(n_ch_readed != text->text_size)
-        {
-            printf("Error while reading file \"%s\". %zu/%zu chars are read.\n", path, n_ch_readed, text->text_size);
-
-            err_code = EIO;
-        }
-    }
-
-    fclose(file);
-
-    return err_code;
 }
 
 void fwrite_text(const struct Text *text, FILE *file)
 {
+    assert(file       != NULL);
+    assert(text       != NULL);
+    assert(text->text != NULL);
+
     for(size_t i = 0; i < text->n_lines; i++)
     {
-        fputs(text->text[i], file);
-        putc('\n', file);
+        fprintf(file, "%4zu\t", text->text[i].l_num);
+        fputs(text->text[i].line, file);
+        fputc('\n', file);
     }
 }
 
@@ -163,7 +176,10 @@ size_t filesize(const char *path)
     assert(path != NULL);
 
     struct stat file_info = {};
-    stat(path, &file_info);
+    if(stat(path, &file_info) == -1)
+    {
+        perror(__func__);
+    }
 
     return (size_t)file_info.st_size;
 }
