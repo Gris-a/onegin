@@ -28,16 +28,11 @@ size_t n_lines(const char *buf);
 
 void text_lines(struct Text *text);
 
-
+void text_destroy(struct Text *text);
 
 
 
 void fwrite_text(const struct Text *text, FILE *file);
-
-
-
-
-void text_destroy(struct Text *text);
 
 size_t filesize(const char *path);
 
