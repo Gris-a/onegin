@@ -74,3 +74,27 @@ int base_text_cmp(const void *elem1, const void *elem2)
     if(l_num1 == l_num2) return 0;
     return l_num1 > l_num2 ? 1 : -1;
 }
+
+int length_cmp(const void *elem1, const void *elem2)
+{
+    assert(elem1 != NULL);
+    assert(elem2 != NULL);
+
+    size_t len1 = ((const Line *)elem1)->len;
+    size_t len2 = ((const Line *)elem2)->len;
+
+    if(len1 == len2) return my_strcmp(elem1, elem2);
+    return len1 > len2 ? 1 : -1;
+}
+
+int length_cmp_reverse(const void *elem1, const void *elem2)
+{
+    assert(elem1 != NULL);
+    assert(elem2 != NULL);
+
+    size_t len1 = ((const Line *)elem1)->len;
+    size_t len2 = ((const Line *)elem2)->len;
+
+    if(len1 == len2) return my_strcmp(elem1, elem2);
+    return len1 < len2 ? 1 : -1;
+}
