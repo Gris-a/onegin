@@ -4,13 +4,13 @@
 #include "../include/comparators.h"
 #include "../include/text.h"
 
-int my_strcmp(const void *a, const void *b)
+int my_strcmp(const void *elem1, const void *elem2)
 {
-    assert(a != NULL);
-    assert(b != NULL);
+    assert(elem1 != NULL);
+    assert(elem2 != NULL);
 
-    struct Line str1 = *(const Line *)a;
-    struct Line str2 = *(const Line *)b;
+    struct Line str1 = *(const Line *)elem1;
+    struct Line str2 = *(const Line *)elem2;
 
     assert(str1.line != NULL);
     assert(str2.line != NULL);
@@ -35,13 +35,13 @@ int my_strcmp(const void *a, const void *b)
     return tolower(*str1.line) - tolower(*str2.line);
 }
 
-int my_strcmp_reverse(const void *a, const void *b)
+int my_strcmp_reverse(const void *elem1, const void *elem2)
 {
-    assert(a != NULL);
-    assert(b != NULL);
+    assert(elem1 != NULL);
+    assert(elem2 != NULL);
 
-    struct Line str1 = *(const Line *)a;
-    struct Line str2 = *(const Line *)b;
+    struct Line str1 = *(const Line *)elem1;
+    struct Line str2 = *(const Line *)elem2;
 
     assert(str1.line != NULL);
     assert(str2.line != NULL);
@@ -63,13 +63,13 @@ int my_strcmp_reverse(const void *a, const void *b)
     return tolower(str1.line[str1.len]) - tolower(str2.line[str2.len]);
 }
 
-int base_text_cmp(const void *a, const void *b)
+int base_text_cmp(const void *elem1, const void *elem2)
 {
-    assert(a != NULL);
-    assert(b != NULL);
+    assert(elem1 != NULL);
+    assert(elem2 != NULL);
 
-    size_t l_num1 = ((const Line *)a)->l_num;
-    size_t l_num2 = ((const Line *)b)->l_num;
+    size_t l_num1 = ((const Line *)elem1)->l_num;
+    size_t l_num2 = ((const Line *)elem2)->l_num;
 
     if(l_num1 == l_num2) return 0;
     return l_num1 > l_num2 ? 1 : -1;

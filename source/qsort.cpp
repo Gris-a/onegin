@@ -10,6 +10,7 @@ void my_qsort(void *begin, void *end, const size_t mem_size, int (*cmp)(const vo
 {
     assert(begin != NULL);
     assert(end   != NULL);
+    assert(cmp   != NULL);
 
     if(end > begin)
     {
@@ -24,6 +25,7 @@ void *my_partition(void *ptr_on_arr_begin, void *ptr_on_arr_end, const size_t me
 {
     assert(ptr_on_arr_begin != NULL);
     assert(ptr_on_arr_end   != NULL);
+    assert(cmp              != NULL);
 
     char *begin = (char *)ptr_on_arr_begin;
     char *end   = (char *)ptr_on_arr_end;

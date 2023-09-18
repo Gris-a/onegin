@@ -2,7 +2,6 @@
 #define TEXT_H
 
 #include <stddef.h>
-#include <stdio.h>
 struct Line
 {
     char *line;
@@ -29,10 +28,6 @@ size_t n_lines(const char *buf);
 void text_lines(struct Text *text);
 
 void text_destroy(struct Text *text);
-
-
-
-void fwrite_text(const struct Text *text, FILE *file);
 
 size_t filesize(const char *path);
 
