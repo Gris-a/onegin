@@ -157,18 +157,6 @@ void text_destroy(struct Text *text)
     free(text->text);
 }
 
-void fwrite_text(const struct Text *text, FILE *file)
-{
-    assert(file       != NULL);
-    assert(text       != NULL);
-    assert(text->text != NULL);
-
-    for(size_t i = 0; i < text->n_lines; i++)
-    {
-        fprintf(file, "%4zu\t%s\n", text->text[i].l_num, text->text[i].line);
-    }
-}
-
 size_t filesize(const char *path)
 {
     assert(path != NULL);

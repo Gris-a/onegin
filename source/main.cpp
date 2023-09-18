@@ -3,9 +3,9 @@
 #include <stdlib.h>
 
 #include "../include/text.h"
+#include "../include/text_to_file.h"
 #include "../include/qsort.h"
 #include "../include/comparators.h"
-
 int main(void)
 {
     struct Text text = {};
@@ -17,19 +17,11 @@ int main(void)
 
     FILE *onegin_text = fopen("Onegins.txt", "w");
 
-    my_qsort(text.text, text.text + text.n_lines - 1, sizeof(Line), my_strcmp);
-    fputs("sorted Onegin\n", onegin_text);
-    fwrite_text(&text, onegin_text);
-    fputs("\n\n\n\n\n\n\n\n\n\n", onegin_text);
+    fwrite_text_sorted(&text, my_strcmp        , onegin_text);
 
-    my_qsort(text.text, text.text + text.n_lines - 1, sizeof(Line), base_text_cmp);
-    fputs("Onegin\n", onegin_text);
-    fwrite_text(&text, onegin_text);
-    fputs("\n\n\n\n\n\n\n\n\n\n", onegin_text);
+    fwrite_text_sorted(&text, base_text_cmp    , onegin_text);
 
-    my_qsort(text.text, text.text + text.n_lines - 1, sizeof(Line), my_strcmp_reverse);
-    fputs("reverse-sorted Onegin\n", onegin_text);
-    fwrite_text(&text, onegin_text);
+    fwrite_text_sorted(&text, my_strcmp_reverse, onegin_text);
 
     text_destroy(&text);
     fclose(onegin_text);
