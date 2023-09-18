@@ -146,7 +146,7 @@ void text_lines(struct Text *text)
     }
 }
 
-void text_destroy(struct Text *text)
+void text_dtor(struct Text *text)
 {
     assert(text != NULL);
 

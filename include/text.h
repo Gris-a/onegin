@@ -27,7 +27,7 @@ size_t n_lines(const char *buf);
 
 void text_lines(struct Text *text);
 
-void text_destroy(struct Text *text);
+void text_dtor(struct Text *text);
 
 size_t filesize(const char *path);
 

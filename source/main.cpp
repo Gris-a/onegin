@@ -28,7 +28,7 @@ int main(void)
 
     fwrite_text_sorted(&text, length_cmp_reverse, onegin_text);
 
-    text_destroy(&text);
+    text_dtor(&text);
     fclose(onegin_text);
 
     return EXIT_SUCCESS;

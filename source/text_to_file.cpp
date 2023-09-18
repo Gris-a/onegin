@@ -11,6 +11,7 @@ void fwrite_text_sorted(struct Text *text, int (*cmp_func)(const void *, const v
     assert(cmp_func != NULL);
 
     my_qsort(text->text, text->text + text->n_lines - 1, sizeof(Line), cmp_func);
+
     fwrite_text(text, file);
     fputs("\n\n\n\n\n\n\n\n\n\n", file);
 }
