@@ -68,21 +68,37 @@ void *my_partition(void *ptr_on_arr_begin, void *ptr_on_arr_end, void *temp, con
     }
 }
 
-void my_swap(void *ptr_on_elem1, void *ptr_on_elem2, const size_t mem_size) //TODO faster
+void my_swap(void *ptr_on_elem1, void *ptr_on_elem2, size_t mem_size)
 {
     assert(ptr_on_elem1 != NULL);
     assert(ptr_on_elem2 != NULL);
 
-    char *ptr1 = (char *)ptr_on_elem1;
-    char *ptr2 = (char *)ptr_on_elem2;
+    long long *ptr1 = (long long *)ptr_on_elem1;
+    long long *ptr2 = (long long *)ptr_on_elem2;
 
-    for(size_t i = 0; i < mem_size; i++)
+    size_t n_chunks = mem_size / 8;
+
+    for(size_t i = 0; i < n_chunks; i++)
     {
-        char temp = *ptr1 + *ptr2;
-        *ptr2 = *ptr1;
-        *ptr1 = temp - *ptr2;
+        *ptr1 = *ptr1 ^ *ptr2;
+        *ptr2 = *ptr1 ^ *ptr2;
+        *ptr1 = *ptr1 ^ *ptr2;
 
         ptr1++;
         ptr2++;
+        mem_size -= 8;
+    }
+
+    char *ptr12 = (char *)ptr1;
+    char *ptr22 = (char *)ptr2;
+
+    for(size_t i = 0; i < mem_size; i++)
+    {
+        *ptr12 = *ptr12 ^ *ptr22;
+        *ptr22 = *ptr12 ^ *ptr22;
+        *ptr12 = *ptr12 ^ *ptr22;
+
+        ptr12++;
+        ptr22++;
     }
 }
