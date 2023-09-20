@@ -7,7 +7,7 @@
 
 #include "../include/text.h"
 
-int text_ctor(struct Buffer *buf, struct Text *text, const char path[])
+int text_ctor(struct Buffer *buf, struct Text *text, const char *path)
 {
     assert(text != NULL);
     assert(buf  != NULL);
@@ -19,18 +19,19 @@ int text_ctor(struct Buffer *buf, struct Text *text, const char path[])
         {
             return err_code;
         }
+        text_preprocessing(buf);
     }
 
-    text->n_lines = text_preprocessing(buf);
+    text->n_lines = buf->n_lines;
     text->lines   = (struct Line *)calloc(text->n_lines + 1, sizeof(Line));
     if(text->lines == NULL)
     {
-        perror(__func__);
+        printf("%s: Unable to allocate memory", __PRETTY_FUNCTION__);
 
         return ENOMEM;
     }
 
-    text_lines(text, buf);
+    fill_text(text, buf);
 
     return EXIT_SUCCESS;
 }
@@ -45,16 +46,16 @@ int read_text_buf(struct Buffer *buf, const char path[])
     FILE *file = fopen(path, "rb");
     if(file == NULL)
     {
-        perror(path);
+        printf("No such file \"%s\"", path);
 
         return ENOENT;
     }
-    buf->text_size = filesize(path);
 
+    buf->text_size = filesize(path);
     buf->text_buf  = (char *)calloc(buf->text_size + 1, sizeof(char));
     if(buf->text_buf == NULL)
     {
-        perror(__func__);
+        printf("%s: Unable to allocate memory", __PRETTY_FUNCTION__);
 
         err_code = ENOMEM;
     }
@@ -76,22 +77,23 @@ int read_text_buf(struct Buffer *buf, const char path[])
     return err_code;
 }
 
-size_t text_preprocessing(struct Buffer *buf)
+void text_preprocessing(struct Buffer *buf)
 {
     assert(buf           != NULL);
     assert(buf->text_buf != NULL);
 
-    char *write_ptr = buf->text_buf;
-    char *read_ptr  = buf->text_buf;
-
-    size_t n_lines = 0;
-
-    if(*write_ptr == '\0')
+    if(*buf->text_buf == '\0')
     {
-        return 0;
+        return;
     }
-    write_ptr++;
-    read_ptr++;
+
+    char *write_ptr = buf->text_buf + 1;
+    char *read_ptr  = buf->text_buf + 1;
+    if(*buf->text_buf == '\n')
+    {
+        write_ptr--;
+    }
+    buf->n_lines = 0;
 
     while(*read_ptr != '\0')
     {
@@ -99,7 +101,7 @@ size_t text_preprocessing(struct Buffer *buf)
         {
             if(*(read_ptr - 1) != '\n')
             {
-                n_lines++;
+                buf->n_lines++;
             }
             else
             {
@@ -108,20 +110,18 @@ size_t text_preprocessing(struct Buffer *buf)
                 continue;
             }
         }
-        *write_ptr = *read_ptr;
 
+        *write_ptr = *read_ptr;
         read_ptr++;
         write_ptr++;
     }
-
     *write_ptr = *read_ptr;
-    n_lines += *(read_ptr - 1) != '\n';
-    buf->text_buf = (char *)realloc(buf->text_buf, buf->text_size = (size_t)(read_ptr - buf->text_buf + 1));
 
-    return n_lines;
+    buf->n_lines += (*(read_ptr - 1) != '\n');
+    buf->text_buf = (char *)realloc(buf->text_buf, buf->text_size = (size_t)(read_ptr - buf->text_buf + 1));
 }
 
-void text_lines(struct Text *text, struct Buffer *buf)
+void fill_text(struct Text *text, struct Buffer *buf)
 {
     assert(text          != NULL);
     assert(text->lines   != NULL);
@@ -130,34 +130,26 @@ void text_lines(struct Text *text, struct Buffer *buf)
 
     char *text_from_buf = buf->text_buf;
 
-    size_t line_len = 0;
-    size_t index    = 0;
+    size_t line_count = 0;
 
-    text->lines[index].line = text_from_buf;
+    text->lines[line_count].line_begin = text_from_buf;
 
     while(*text_from_buf != '\0')
     {
         if(*text_from_buf == '\n')
         {
-            text->lines[index].len    = line_len;
-            text->lines[index].l_num  = index + 1;
-            text->lines[++index].line = text_from_buf + 1;
+            text->lines[line_count++].line_end = text_from_buf;
+            text->lines[line_count].line_begin = text_from_buf + 1;
 
-            line_len = 0;
             *text_from_buf = '\0';
-        }
-        else
-        {
-            line_len++;
         }
 
         text_from_buf++;
     }
 
-    if(index < text->n_lines)
+    if(line_count < text->n_lines)
     {
-        text->lines[index].len   = line_len;
-        text->lines[index].l_num = index + 1;
+        text->lines[line_count].line_end = text_from_buf;
     }
 }
 
@@ -174,6 +166,7 @@ void buf_dtor(struct Buffer *buf)
     assert(buf != NULL);
 
     buf->text_size = 0;
+    buf->n_lines   = 0;
     free(buf->text_buf);
 }
 
@@ -184,7 +177,7 @@ size_t filesize(const char *path)
     struct stat file_info = {};
     if(stat(path, &file_info) == -1)
     {
-        perror(__func__);
+        printf("No such file \"%s\"", path);
     }
 
     return (size_t)file_info.st_size;

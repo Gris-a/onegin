@@ -24,6 +24,7 @@ void fwrite_text(const struct Text *text, FILE *file)
 
     for(size_t i = 0; i < text->n_lines; i++)
     {
-        fprintf(file, "%4zu\t%s\n", text->lines[i].l_num, text->lines[i].line);
+        fputs(text->lines[i].line_begin, file);
+        putc('\n', file);
     }
 }
