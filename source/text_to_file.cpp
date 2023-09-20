@@ -3,12 +3,13 @@
 
 #include "../include/text_to_file.h"
 #include "../include/qsort.h"
-//TODO return value
+
 void fwrite_text_sorted(struct Text *text, int (*cmp_func)(const void *, const void *), FILE *file)
 {
-    assert(file     != NULL);
-    assert(text     != NULL);
-    assert(cmp_func != NULL);
+    assert(file       != NULL);
+    assert(text       != NULL);
+    assert(text->text != NULL);
+    assert(cmp_func   != NULL);
 
     my_qsort(text->text, text->text + text->n_lines - 1, sizeof(Line), cmp_func);
 

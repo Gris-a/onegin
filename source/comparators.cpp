@@ -41,7 +41,7 @@ int my_strcmp_reverse(const void *elem1, const void *elem2)
     assert(elem2 != NULL);
 
     struct Line str1 = *(const Line *)elem1;
-    struct Line str2 = *(const Line *)elem2;
+    struct Line str2 = *(const struct Line *)elem2;
 
     assert(str1.line != NULL);
     assert(str2.line != NULL);
