@@ -18,15 +18,11 @@ int main(void)
 
     FILE *onegin_text = fopen("Onegins.txt", "w");
 
-    fwrite_text_sorted(&text, my_strcmp         , onegin_text);
+    fwrite_text_sorted(&text, my_line_cmp, onegin_text);
 
-    fwrite_text_sorted(&text, base_text_cmp     , onegin_text);
+    fputs("\n\n\n\n\n\n\n\n\n\n", onegin_text);
 
-    fwrite_text_sorted(&text, my_strcmp_reverse , onegin_text);
-
-    fwrite_text_sorted(&text, length_cmp        , onegin_text);
-
-    fwrite_text_sorted(&text, length_cmp_reverse, onegin_text);
+    fwrite_text_sorted(&text, my_line_cmp_reverse , onegin_text);
 
     buf_dtor(&buf);
     text_dtor(&text);
