@@ -5086,16 +5086,6 @@
 3378	Zaretski, village mechanician,
 3173	Zaretski with a knowing grin,
 2905	Zizi, thou mirror of my mind,
-
-
-
-
-
-
-
-
-
-
    1	"My uncle's goodness is extreme,
    2	If seriously he hath disease;
    3	He hath acquired the world's esteem
@@ -10184,16 +10174,6 @@
 5086	Who the romance do not complete,
 5087	But who abandon it--as I
 5088	Have my Oneguine--suddenly.
-
-
-
-
-
-
-
-
-
-
 2771	Nor Byron, Walter Scott, nor Seneca,
 1284	Fair source of every fine idea,
  585	Upon the highway of the sea
@@ -15282,16 +15262,6 @@
 4790	I thought--retirement, liberty,
 4006	Thou too farewell, my liberty!
  130	Of tender years the modesty
-
-
-
-
-
-
-
-
-
-
 3651	Moscow
 1733	By time
 4157	"Aline!"
@@ -20380,16 +20350,6 @@
 3968	And lonely through the forest creeps.""Is she in love?" quoth one. "With whom?
 3824	And mourned him still. Why mourn his fate?'Twas eve. 'Twas dusk. The river speeds
 2737	In one great shout: she's mine! she's mine!"Mine!" cried Eugene with savage tone.
-
-
-
-
-
-
-
-
-
-
 3824	And mourned him still. Why mourn his fate?'Twas eve. 'Twas dusk. The river speeds
 2737	In one great shout: she's mine! she's mine!"Mine!" cried Eugene with savage tone.
 3968	And lonely through the forest creeps.""Is she in love?" quoth one. "With whom?
@@ -25478,13 +25438,3 @@
 2477	The Fete
 1733	By time
 3651	Moscow
-
-
-
-
-
-
-
-
-
-

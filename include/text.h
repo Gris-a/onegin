@@ -9,25 +9,30 @@ struct Line
     size_t l_num;
 };
 
-struct Text
+struct Buffer
 {
     char *text_buf;
     size_t text_size;
+};
 
-    struct Line *text;
+struct Text
+{
+    struct Line *lines;
     size_t n_lines;
 };
 
 
-int make_text(const char path[], struct Text *text);
+int text_ctor(struct Buffer *buf, struct Text *text, const char *path = NULL);
 
-int read_text_buf(const char path[], struct Text *text);
+int read_text_buf(struct Buffer *buf, const char path[]);
 
-size_t n_lines(const char *buf);
+size_t text_preprocessing(struct Buffer *buf);
 
-void text_lines(struct Text *text);
+void text_lines(struct Text *text, struct Buffer *buf);
 
 void text_dtor(struct Text *text);
+
+void buf_dtor(struct Buffer *buf);
 
 size_t filesize(const char *path);
 

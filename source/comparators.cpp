@@ -9,8 +9,8 @@ int my_strcmp(const void *elem1, const void *elem2)
     assert(elem1 != NULL);
     assert(elem2 != NULL);
 
-    struct Line str1 = *(const Line *)elem1;
-    struct Line str2 = *(const Line *)elem2;
+    struct Line str1 = *(const struct Line *)elem1;
+    struct Line str2 = *(const struct Line *)elem2;
 
     assert(str1.line != NULL);
     assert(str2.line != NULL);
@@ -40,7 +40,7 @@ int my_strcmp_reverse(const void *elem1, const void *elem2)
     assert(elem1 != NULL);
     assert(elem2 != NULL);
 
-    struct Line str1 = *(const Line *)elem1;
+    struct Line str1 = *(const struct Line *)elem1;
     struct Line str2 = *(const struct Line *)elem2;
 
     assert(str1.line != NULL);
@@ -92,8 +92,8 @@ int length_cmp_reverse(const void *elem1, const void *elem2)
     assert(elem1 != NULL);
     assert(elem2 != NULL);
 
-    size_t len1 = ((const Line *)elem1)->len;
-    size_t len2 = ((const Line *)elem2)->len;
+    size_t len1 = ((const struct Line *)elem1)->len;
+    size_t len2 = ((const struct Line *)elem2)->len;
 
     if(len1 == len2) return my_strcmp(elem1, elem2);
     return len1 < len2 ? 1 : -1;

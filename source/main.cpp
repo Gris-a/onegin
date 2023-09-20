@@ -8,8 +8,9 @@
 
 int main(void)
 {
-    struct Text text = {};
-    int err_code = make_text("Onegin.txt", &text);
+    struct Buffer buf = {};
+    struct Text text  = {};
+    int err_code = text_ctor(&buf, &text, "Onegin.txt");
     if(err_code)
     {
         return err_code;
@@ -27,6 +28,7 @@ int main(void)
 
     fwrite_text_sorted(&text, length_cmp_reverse, onegin_text);
 
+    buf_dtor(&buf);
     text_dtor(&text);
     fclose(onegin_text);
 
