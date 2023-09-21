@@ -8,4 +8,6 @@ void fwrite_text_sorted(struct Text *text, int (*cmp_func)(const void *, const v
 
 void fwrite_text(const struct Text *text, FILE *file);
 
+void fwrite_buffer(const struct Buffer *buf, FILE *file);
+
 #endif //TEXT_TO_FILE_H

@@ -10,6 +10,7 @@ int main(void)
 {
     struct Buffer buf = {};
     struct Text text  = {};
+
     int err_code = text_ctor(&buf, &text, "Onegin.txt");
     if(err_code)
     {
@@ -22,7 +23,11 @@ int main(void)
 
     fputs("\n\n\n\n\n\n\n\n\n\n", onegin_text);
 
-    fwrite_text_sorted(&text, my_line_cmp_reverse , onegin_text);
+    fwrite_text_sorted(&text, my_line_cmp_reverse, onegin_text);
+
+    fputs("\n\n\n\n\n\n\n\n\n\n", onegin_text);
+
+    fwrite_buffer(&buf, onegin_text);
 
     buf_dtor(&buf);
     text_dtor(&text);

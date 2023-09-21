@@ -11,16 +11,15 @@ int text_ctor(struct Buffer *buf, struct Text *text, const char *path)
 {
     assert(text != NULL);
     assert(buf  != NULL);
+    assert(path != NULL);
 
     int err_code = 0;
-    if(path)
+    if((err_code = read_text_buf(buf, path)))
     {
-        if((err_code = read_text_buf(buf, path)))
-        {
-            return err_code;
-        }
-        text_preprocessing(buf);
+        return err_code;
     }
+
+    text_preprocessing(buf);
 
     text->n_lines = buf->n_lines;
     text->lines   = (struct Line *)calloc(text->n_lines + 1, sizeof(Line));
@@ -118,7 +117,7 @@ void text_preprocessing(struct Buffer *buf)
     *write_ptr = *read_ptr;
 
     buf->n_lines += (*(read_ptr - 1) != '\n');
-    buf->text_buf = (char *)realloc(buf->text_buf, buf->text_size = (size_t)(read_ptr - buf->text_buf + 1));
+    buf->text_buf = (char *)realloc(buf->text_buf, buf->text_size = (size_t)(write_ptr - buf->text_buf + 1));
 }
 
 void fill_text(struct Text *text, struct Buffer *buf)

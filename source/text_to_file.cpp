@@ -28,3 +28,21 @@ void fwrite_text(const struct Text *text, FILE *file)
         putc('\n', file);
     }
 }
+
+void fwrite_buffer(const struct Buffer *buf, FILE *file)
+{
+    assert(buf           != NULL);
+    assert(buf->text_buf != NULL);
+
+    for(size_t i = 0; i < buf->text_size; i++)
+    {
+        if(buf->text_buf[i] != '\0')
+        {
+            fputc(buf->text_buf[i], file);
+        }
+        else
+        {
+            fputc('\n', file);
+        }
+    }
+}
