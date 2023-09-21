@@ -6,6 +6,11 @@
 
 #include "../include/qsort.h"
 
+/**
+ * @file qsort.cpp
+ * @brief qsort.h functions
+*/
+
 void my_qsort(void *ptr_on_arr_begin, void *ptr_on_arr_end, const size_t mem_size, int (*cmp)(const void *, const void *))
 {
     assert(ptr_on_arr_begin != NULL);

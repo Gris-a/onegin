@@ -7,6 +7,11 @@
 
 #include "../include/text.h"
 
+/**
+ * @file text.cpp
+ * @brief text.h functions
+*/
+
 int text_ctor(struct Buffer *buf, struct Text *text, const char *path)
 {
     assert(text != NULL);

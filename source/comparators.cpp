@@ -4,6 +4,11 @@
 #include "../include/comparators.h"
 #include "../include/text.h"
 
+/**
+ * @file comparators.cpp
+ * @brief comparators.h functions
+*/
+
 int my_line_cmp(const void *line1, const void *line2)
 {
     assert(line1 != NULL);

@@ -4,6 +4,11 @@
 #include "../include/text_to_file.h"
 #include "../include/qsort.h"
 
+/**
+ * @file text_to_file.cpp
+ * @brief text_to_file.h functions
+*/
+
 void fwrite_text_sorted(struct Text *text, int (*cmp_func)(const void *, const void *), FILE *file)
 {
     assert(file        != NULL);
